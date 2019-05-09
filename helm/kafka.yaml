@@ -1,0 +1,42 @@
+# ------------------------------------------------------------------------------
+# update values to enable external connection 
+# ------------------------------------------------------------------------------
+
+## External access.
+##
+external:
+  enabled: true
+  type: LoadBalancer
+  # annotations:
+  # service.beta.kubernetes.io/openstack-internal-load-balancer: “true”
+  dns:
+    useInternal: false
+    useExternal: false # default is true, but we don't want any here
+  distinct: false  # create an A record for each statefulset pod
+  servicePort: 19092
+  firstListenerPort: 31090
+  loadBalancerIP: 
+    - 52.175.200.191
+    - 52.151.35.141
+    - 52.229.61.173
+
+## Configuration Overrides. Specify any Kafka settings you would like set on the StatefulSet
+## here in map format, as defined in the official docs.
+## ref: https://kafka.apache.org/documentation/#brokerconfigs
+##
+configurationOverrides:
+  ## Options required for external access via NodePort
+  ## ref:
+  ## - http://kafka.apache.org/documentation/#security_configbroker
+  ## - https://cwiki.apache.org/confluence/display/KAFKA/KIP-103%3A+Separation+of+Internal+and+External+traffic
+  ## If external service type is LoadBalancer and distinct is false:
+  "advertised.listeners": EXTERNAL://${LOAD_BALANCER_IP}:31090
+  "listener.security.protocol.map": PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+  "listeners": PLAINTEXT://:9092,EXTERNAL://:31090
+  "inter.broker.listener.name": "PLAINTEXT"
+
+
+## The StatefulSet Update Strategy which Kafka will use when changes are applied.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+updateStrategy:
+  type: "RollingUpdate"

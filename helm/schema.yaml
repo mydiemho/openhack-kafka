@@ -1,0 +1,49 @@
+# Default values for Confluent Schema-Registry
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+resources: {}
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+## The port on which the SchemaRegistry will be available and serving requests
+servicePort: 8081
+
+## If `Kafka.Enabled` is `false`, kafkaStore.overrideBootstrapServers must be provided for Master Election.
+## You can list load balanced service endpoint, or list of all brokers (which is hard in K8s).  e.g.:
+## overrideBootstrapServers: "PLAINTEXT://dozing-prawn-kafka-headless:9092"
+## Charts uses Kafka Coordinator Master Election: https://docs.confluent.io/current/schema-registry/docs/design.html#kafka-coordinator-master-election
+kafkaStore:
+  overrideBootstrapServers: "PLAINTEXT://kafka-headless:9092"
+  # By Default uses Release Name, but can be overridden.  Which means each release is its own group of
+  # Schema Registry workers.  You can have multiple groups talking to same Kafka Cluster
+  overrideGroupId: ""
+  ## Additional Java arguments to pass to Kafka.
+  # schemaRegistryOpts: -Dfoo=bar
+
+## Kafka Settings
+kafka:
+  ## This is enabled only to allow installations of this chart without arguments
+  enabled: false # we already have kafka set up
+
+## Provides schema registry ingress settings
+ingress:
+  ## If true provide ingress to the schema registry
+  enabled: true
+  ## Hostname of the ingress
+  hostname: ""
+  ## Any additional labels to add to the ingress
+  labels: {}
+  tls:
+    enabled: false
+
+## External Nodeport/LoadBalancer for Cloud Providers
+external:
+  enabled: true
+  type: LoadBalancer
+  servicePort: 8081
