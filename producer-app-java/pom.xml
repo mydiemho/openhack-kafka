@@ -9,6 +9,14 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
+    <properties>
+        <!-- Keep versions as properties to allow easy modification -->
+        <avro.version>1.8.2</avro.version>
+        <!-- Maven properties for compilation -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <repositories>
         <repository>
             <id>confluent</id>
@@ -65,6 +73,42 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
+                            <includes>
+                                <include>avro.avsc</include>
+                            </includes>
+                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>io.confluent</groupId>-->
+<!--                <artifactId>kafka-schema-registry-maven-plugin</artifactId>-->
+<!--                <version>5.2.1</version>-->
+<!--                <configuration>-->
+<!--                    <schemaRegistryUrls>-->
+<!--                        <param>http://40.65.121.104:8081</param>-->
+<!--                    </schemaRegistryUrls>-->
+<!--                    <subjects>-->
+<!--                        <transactions-value>src/main/resources/avro/avro.avsc</transactions-value>-->
+<!--                    </subjects>-->
+<!--                </configuration>-->
+<!--                <goals>-->
+<!--                    <goal>test-compatibility</goal>-->
+<!--                </goals>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
