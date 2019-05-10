@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "paymentMessages",
+      "direction": "in",
+      "eventHubName": "payment",
+      "connection": "eh-connection-string",
+      "cardinality": "many",
+      "consumerGroup": "$Default"
+    }
+  ]
+}
