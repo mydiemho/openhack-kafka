@@ -7,7 +7,8 @@
       "eventHubName": "team12-eh",
       "connection": "eventHub",
       "cardinality": "many",
-      "consumerGroup": "$Default"
+      "consumerGroup": "$Default",
+      "path": "team12-eh"
     }
   ]
 }
