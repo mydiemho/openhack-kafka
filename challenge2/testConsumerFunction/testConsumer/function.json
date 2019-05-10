@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "eventHubMessages",
+      "direction": "in",
+      "eventHubName": "team12-eh",
+      "connection": "eventHub",
+      "cardinality": "many",
+      "consumerGroup": "$Default"
+    }
+  ]
+}
